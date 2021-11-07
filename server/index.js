@@ -20,6 +20,7 @@ app.get("/todos", async (req, res) => {
 		console.error("Error in getting the todos: " + error.message);
 	}
 });
+
 // get a todo
 app.get("/todos/:id", async (req, res) => {
 	try {
@@ -34,6 +35,7 @@ app.get("/todos/:id", async (req, res) => {
 		);
 	}
 });
+
 // create a todo:
 app.post("/todos", async (req, res) => {
 	try {
@@ -47,20 +49,22 @@ app.post("/todos", async (req, res) => {
 		console.error("Error posting the todo: " + error.message);
 	}
 });
+
 // update a todo:
 app.put("/todos/:id", async (req, res) => {
 	try {
 		const { description } = req.body;
 		const { id } = req.params;
 		const updatedTodo = await pool.query(
-			"UPDATE todo SET description = $1 WHERE todo_id = $2 RETURNING *",
+			"UPDATE todo SET description = $1 WHERE todo_id = $2",
 			[description, id]
 		);
-		res.json(updatedTodo.rows);
+		res.json("Todo was updated");
 	} catch (error) {
-		console.error("Error posting the todo: " + error.message);
+		console.error("Error updating the todo: " + error.message);
 	}
 });
+
 // delete a todo:
 app.delete("/todos/:id", async (req, res) => {
 	try {
@@ -68,7 +72,7 @@ app.delete("/todos/:id", async (req, res) => {
 		const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
 			id,
 		]);
-		res.json("Todo " + id + " was deleted.");
+		res.json("Todo " + id + " was deleted."); //this is wrong and should be fixed with priority basis 3 no kidding around like a dummbo
 	} catch (error) {
 		console.error(
 			"Error in getting the todo " + req.params.id + " : " + error.message
